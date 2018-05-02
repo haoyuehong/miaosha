@@ -1,6 +1,7 @@
 package com.hz1202.miaosha.controller;
 
 import com.hz1202.miaosha.model.User;
+import com.hz1202.miaosha.result.Result;
 import com.hz1202.miaosha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,7 @@ public class TestController {
 
     @RequestMapping("/user")
     @ResponseBody
-    public User getById(Integer id){
-        return userService.getById(id);
+    public Result getById(Integer id){
+        return Result.success(userService.getById(id));
     }
 }
