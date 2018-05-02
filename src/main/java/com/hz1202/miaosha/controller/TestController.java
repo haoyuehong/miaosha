@@ -1,6 +1,5 @@
 package com.hz1202.miaosha.controller;
 
-import com.hz1202.miaosha.model.User;
 import com.hz1202.miaosha.result.Result;
 import com.hz1202.miaosha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
