@@ -19,4 +19,8 @@ public class UserService {
     public User getById(Integer id){
         return userDao.selectById(id);
     }
+
+    public void save(User user){
+        userDao.save(user);
+    }
 }
