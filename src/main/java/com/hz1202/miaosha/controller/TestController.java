@@ -1,6 +1,7 @@
 package com.hz1202.miaosha.controller;
 
 import com.hz1202.miaosha.model.User;
+import com.hz1202.miaosha.redis.UserKey;
 import com.hz1202.miaosha.result.Result;
 import com.hz1202.miaosha.service.RedisService;
 import com.hz1202.miaosha.service.UserService;
@@ -62,13 +63,15 @@ public class TestController {
     @RequestMapping("/redis/get")
     @ResponseBody
     public Result redisGet(){
-        User key1 = redisService.get("key2", User.class);
+        User key1 = redisService.get(UserKey.getById,""+1,User.class);
         return Result.success(key1);
     }
 
     @RequestMapping("/redis/set")
     @ResponseBody
     public Result redisSet(){
-        return Result.success(redisService.set("key2", userService.getById(6)));
+        return Result.success(redisService.set(UserKey.getById,"id",userService.getById(6)));
     }
+
+
 }

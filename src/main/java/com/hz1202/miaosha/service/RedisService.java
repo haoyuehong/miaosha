@@ -67,6 +67,33 @@ public class RedisService {
         }
     }
 
+
+    public Boolean incr(KeyPrefix prefix,String key){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            //生成真正的key
+            String realKey = prefix.getPrefix()+key;
+            jedis.incr(realKey);
+            return true;
+        }finally {
+            returnToPool(jedis);
+        }
+    }
+
+    public Boolean decr(KeyPrefix prefix,String key){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            //生成真正的key
+            String realKey = prefix.getPrefix()+key;
+            jedis.decr(realKey);
+            return true;
+        }finally {
+            returnToPool(jedis);
+        }
+    }
+
     private <T> String beanToString(T value) {
         if(value == null){
             return null;
