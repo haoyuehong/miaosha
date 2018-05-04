@@ -11,8 +11,9 @@ import java.util.regex.Pattern;
  * @Date: create in 8:37 2018/5/4
  */
 public class ValidatorUtil {
-    //private static final Pattern mobile_pattern = Pattern.compile("/^1\\d{10}$/");
-    private static final Pattern mobile_pattern = Pattern.compile("1\\d{10}");
+
+    private static final Pattern mobile_pattern = Pattern.compile("/^1\\d{10}$/");
+    //private static final Pattern mobile_pattern = Pattern.compile("1\\d{10}");
 
     public static boolean isMobile(String src){
         if(StringUtils.isEmpty(src)){
