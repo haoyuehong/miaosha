@@ -1,15 +1,21 @@
 package com.hz1202.miaosha.service;
 
 import com.hz1202.miaosha.dao.MiaoShaUserDao;
+import com.hz1202.miaosha.exception.GlobleException;
 import com.hz1202.miaosha.model.MiaoShaUser;
+import com.hz1202.miaosha.redis.MiaoShaUserKey;
 import com.hz1202.miaosha.result.CodeMsg;
 import com.hz1202.miaosha.result.Result;
 import com.hz1202.miaosha.utils.MD5Util;
+import com.hz1202.miaosha.utils.UUIDUtil;
 import com.hz1202.miaosha.utils.ValidatorUtil;
 import com.hz1202.miaosha.vo.LoginVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author: mol
@@ -18,39 +24,61 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MiaoShaUserService {
+    public static final String COOKIE_TOKEN_NAME = "token";
+
 
     @Autowired
     private MiaoShaUserDao userDao;
+    @Autowired
+    private RedisService redisService;
+
+
 
     public MiaoShaUser getById(Long id){
         return userDao.getById(id);
     }
 
-    public CodeMsg login(LoginVo loginVo){
+    public boolean login(HttpServletResponse response,LoginVo loginVo){
+        if(loginVo == null){
+            throw new GlobleException(CodeMsg.SERVER_ERROR);
+        }
         String mobile = loginVo.getMobile();
         String password = loginVo.getPassword();
-        /*if(StringUtils.isEmpty(password)){
-            return CodeMsg.PASSWORD_EMPTY;
-        }
-
-        if(StringUtils.isEmpty(mobile)){
-            return CodeMsg.MOBILE_EMPTY;
-        }
-        if(ValidatorUtil.isMobile(mobile)){
-            return CodeMsg.MOBILE_ERROR;
-        }*/
         //登录
         MiaoShaUser user = getById(Long.parseLong(mobile));
         if(user == null){
-            return CodeMsg.MOBILE_NOT_EXIT;
+            throw new GlobleException(CodeMsg.MOBILE_NOT_EXIT);
         }
         //验证密码
         String dbPass = user.getPassword();
         String saltDB = user.getSalt();
         String formPassToDBPass = MD5Util.formPassToDBPass(password, saltDB);
         if(!formPassToDBPass.equals(dbPass)){
-            return CodeMsg.PASSWORD_ERROR;
+            throw new GlobleException(CodeMsg.PASSWORD_ERROR);
         }
-        return CodeMsg.SUCCESS;
+        //生成token 将用户信息存入redis
+        String token = UUIDUtil.getUUID();
+        addCookie(token,user,response);
+        return true;
+    }
+
+    public MiaoShaUser getByToken(String token,HttpServletResponse response) {
+       if(StringUtils.isEmpty(token)){
+           return null;
+       }
+       MiaoShaUser user = redisService.get(MiaoShaUserKey.userToken,token,MiaoShaUser.class);
+       if(user != null){
+           addCookie(token,user,response);
+       }
+       return user;
+    }
+
+    private void addCookie(String token,MiaoShaUser user,HttpServletResponse response){
+        redisService.set(MiaoShaUserKey.userToken,token,user);
+        //生成cookie
+        Cookie cookie = new Cookie(COOKIE_TOKEN_NAME,token);
+        cookie.setMaxAge(MiaoShaUserKey.userToken.expireSeconds());
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 }
