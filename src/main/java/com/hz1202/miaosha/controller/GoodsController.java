@@ -54,6 +54,7 @@ public class GoodsController {
         MiaoShaUser user = userService.getByToken(token,response);*/
         List<GoodsVo> goodsVos = goodsService.listGoodsVo();
         model.addAttribute("goodsList",goodsVos);
+        model.addAttribute("user",user);
         return "goods_list";
     }
 
