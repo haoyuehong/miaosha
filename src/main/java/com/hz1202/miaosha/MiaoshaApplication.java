@@ -2,8 +2,6 @@ package com.hz1202.miaosha;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
 public class MiaoshaApplication /*extends SpringBootServletInitializer*/{

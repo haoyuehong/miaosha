@@ -1,5 +1,6 @@
 package com.hz1202.miaosha.service;
 
+import com.fasterxml.jackson.core.sym.NameN;
 import com.hz1202.miaosha.dao.MiaoShaUserDao;
 import com.hz1202.miaosha.exception.GlobleException;
 import com.hz1202.miaosha.model.MiaoShaUser;
@@ -35,7 +36,16 @@ public class MiaoShaUserService {
 
 
     public MiaoShaUser getById(Long id){
-        return userDao.getById(id);
+        //取缓存
+        MiaoShaUser user = redisService.get(MiaoShaUserKey.getById, "" + id, MiaoShaUser.class);
+        if(user != null){
+            return user;
+        }
+        user = userDao.getById(id);
+        if(user != null){
+            redisService.set(MiaoShaUserKey.getById,""+id,user);
+        }
+        return user;
     }
 
     public boolean login(HttpServletResponse response,LoginVo loginVo){

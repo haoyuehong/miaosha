@@ -7,8 +7,10 @@ package com.hz1202.miaosha.redis;
  */
 public abstract class BasePrefix implements KeyPrefix{
 
+    //有效时间
     private int expireSeconds;
 
+    //前缀
     private String prefix;
 
     public BasePrefix(String prefix) {

@@ -18,31 +18,51 @@ public class RedisService {
     @Autowired
     JedisPool jedisPool;
 
+    /**
+     * redis get方法（该工具中为了保证所有key都唯一  所以给每一个key都加了前缀）
+     * @param prefix 前缀
+     * @param key key值
+     * @param clazz 获取后要转换成的对象类型
+     * @return 转换后的对象
+     */
     public <T> T get(KeyPrefix prefix,String key, Class<T> clazz){
         Jedis jedis = null;
         try {
+            //获取jedis
             jedis = jedisPool.getResource();
             //获取真正的key
             String realKey = prefix.getPrefix()+key;
             String str = jedis.get(realKey);
+            //将获取到的String转换成clazz对象
             T t = StringToBean(str,clazz);
             return t;
         }finally {
+            //完成后回收资源
             returnToPool(jedis);
         }
     }
 
+    /**
+     * redis set方法（该工具中为了保证所有key都唯一  所以给每一个key都加了前缀）
+     * @param prefix 前缀
+     * @param key key值
+     * @param value 要保存的数据
+     */
     public <T> Boolean set(KeyPrefix prefix,String key,T value){
         Jedis jedis = null;
         try {
+            //获取jedis
             jedis = jedisPool.getResource();
+            //将对象转换为字符串
             String str = beanToString(value);
             if(str == null || str.length() <= 0){
                 return false;
             }
             //生成真正的key
             String realKey = prefix.getPrefix()+key;
+            //获取key有效时间
             int seconds = prefix.expireSeconds();
+            //如果有效时间小于等于0，说名该key值永久有效，否则在保存数据时需要加入有效时间
             if(seconds <= 0){
                 jedis.set(realKey,str);
             }else{
@@ -54,6 +74,12 @@ public class RedisService {
         }
     }
 
+    /**
+     * 判断key是否存在
+     * @param prefix 前缀
+     * @param key key值
+     * @return
+     */
     public Boolean exists(KeyPrefix prefix,String key){
         Jedis jedis = null;
         try {
@@ -68,6 +94,12 @@ public class RedisService {
     }
 
 
+    /**
+     * 给当前的key对应的value + 1
+     * @param prefix 前缀
+     * @param key key值
+     * @return
+     */
     public Boolean incr(KeyPrefix prefix,String key){
         Jedis jedis = null;
         try {
@@ -81,6 +113,12 @@ public class RedisService {
         }
     }
 
+    /**
+     * 给当前key对应的value - 1
+     * @param prefix 前缀
+     * @param key key
+     * @return
+     */
     public Boolean decr(KeyPrefix prefix,String key){
         Jedis jedis = null;
         try {
@@ -94,6 +132,12 @@ public class RedisService {
         }
     }
 
+    /**
+     * 将对象转换为字符串
+     * @param value
+     * @param <T>
+     * @return
+     */
     private <T> String beanToString(T value) {
         if(value == null){
             return null;
@@ -110,6 +154,13 @@ public class RedisService {
         }
     }
 
+    /**
+     * 将String 转换为对象
+     * @param str
+     * @param clazz
+     * @param <T>
+     * @return
+     */
     @SuppressWarnings("unchecked")
     private <T> T StringToBean(String str,Class<T> clazz) {
         if(str == null || str.length() <= 0 || clazz == null){
@@ -126,6 +177,10 @@ public class RedisService {
         }
     }
 
+    /**
+     * 回收redis资源
+     * @param jedis
+     */
     private void returnToPool(Jedis jedis) {
         if(jedis!=null){
             jedis.close();
