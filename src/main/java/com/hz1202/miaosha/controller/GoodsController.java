@@ -3,9 +3,11 @@ package com.hz1202.miaosha.controller;
 import com.hz1202.miaosha.MiaoshaApplication;
 import com.hz1202.miaosha.model.MiaoShaUser;
 import com.hz1202.miaosha.redis.GoodsKey;
+import com.hz1202.miaosha.result.Result;
 import com.hz1202.miaosha.service.GoodsService;
 import com.hz1202.miaosha.service.MiaoShaUserService;
 import com.hz1202.miaosha.service.RedisService;
+import com.hz1202.miaosha.vo.GoodsDetailVo;
 import com.hz1202.miaosha.vo.GoodsVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,14 +78,14 @@ public class GoodsController {
         return str;
     }
 
-    @RequestMapping(value = "/to_detail/{id}",produces = "text/html")
+    @RequestMapping(value = "/to_detail/{id}")
     @ResponseBody
-    public String toDetail(@PathVariable("id")long id,Model model,MiaoShaUser user,HttpServletResponse response,HttpServletRequest request){
+    public Result<GoodsDetailVo> toDetail(@PathVariable("id")long id,  MiaoShaUser user){
         //取缓存
-        String str = redisService.get(GoodsKey.getGoodsDetail, ""+id , String.class);
+       /* String str = redisService.get(GoodsKey.getGoodsDetail, ""+id , String.class);
         if(!StringUtils.isEmpty(str)){
             return str;
-        }
+        }*/
         GoodsVo  goodsVo = goodsService.findById(id);
         long startTime = goodsVo.getStartDate().getTime();
         long endTime = goodsVo.getEndDate().getTime();
@@ -101,16 +103,17 @@ public class GoodsController {
             remianSeconds = 0;
         }
 
-        model.addAttribute("miaoshaStatus",miaoshaStatus);
+        /*model.addAttribute("miaoshaStatus",miaoshaStatus);
         model.addAttribute("remianSeconds",remianSeconds);
         model.addAttribute("goodsVo",goodsVo);
-        model.addAttribute("user",user);
+        model.addAttribute("user",user);*/
 
-        SpringWebContext swc = new SpringWebContext(request,response,request.getServletContext(),request.getLocale(),model.asMap(),application);
+        /*SpringWebContext swc = new SpringWebContext(request,response,request.getServletContext(),request.getLocale(),model.asMap(),application);
         str = thymeleafViewResolver.getTemplateEngine().process("goods_detail",swc);
         if(!StringUtils.isEmpty(str)){
             redisService.set(GoodsKey.getGoodsDetail,""+id,str);
-        }
-        return str;
+        }*/
+
+        return Result.success(new GoodsDetailVo(goodsVo,miaoshaStatus,remianSeconds,user));
     }
 }

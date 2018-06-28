@@ -45,10 +45,13 @@
                 <span th:if="${miaoshaStatus eq 2}">秒杀已结束</span>
             </td>
             <td>
-                <form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
+                <!--<form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
                     <button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
                     <input type="hidden" name="goodsId" th:value="${goodsVo.id}" />
-                </form>
+                </form>-->
+
+                <button class="btn btn-primary btn-block" type="button" onclick="doMiaosha()" id="buyButton">立即秒杀</button>
+                <input type="hidden" name="goodsId" th:value="${goodsVo.id}" />
             </td>
         </tr>
         <tr>
@@ -67,6 +70,10 @@
 </div>
 </body>
 <script>
+
+    function doMiaosha(){
+
+    }
     $(function(){
         countDown();
     });
