@@ -50,7 +50,7 @@
 
                <!-- <button class="btn btn-primary btn-block" type="button" onclick="doMiaosha()" id="buyButton">立即秒杀</button>
                 <input type="hidden" name="goodsId" value="${goodsVo.id}" />-->
-                <button class="btn btn-primary btn-block" type="button" onclick="doMiaosha()">立即秒杀</button>
+                <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="doMiaosha()">立即秒杀</button>
                 <input type="hidden" name="goodsId" id="goodsId" />
             </td>
         </tr>
@@ -81,7 +81,7 @@
             type:"POST",
             success:function (data) {
                if(data.code == 0){
-                    window.location
+                    window.location.href="/order_detail.htm?oderId="+data.data.id;
                }else{
                    layer.msg(data.msg)
                }
@@ -137,7 +137,6 @@
 
     function countDown(){
         var remainSeconds = $("#remainSeconds").val();
-        console.log("距离秒杀还有:"+remainSeconds+"秒");
         var timeout;
         if(remainSeconds > 0){//秒杀还没开始，倒计时
             $("#miaoshaTip").text("秒杀倒计时:"+remainSeconds+"秒")

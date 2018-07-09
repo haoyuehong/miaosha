@@ -4,6 +4,8 @@ import com.hz1202.miaosha.model.MiaoShaOrder;
 import com.hz1202.miaosha.model.OrderInfo;
 import org.apache.ibatis.annotations.*;
 
+import javax.annotation.security.PermitAll;
+
 /**
  * @Author: mol
  * @Description:
@@ -26,4 +28,6 @@ public interface OrderDao {
     @Insert("insert into miaosha_order(user_id,order_id,goods_id) values(#{userId},#{orderId},#{goodsId})")
     void insertMiaoShaOrder(MiaoShaOrder miaoShaOrder);
 
+    @Select("Select * from order_info where id = #{orderId}")
+    OrderInfo findById(@Param("orderId") long orderId);
 }

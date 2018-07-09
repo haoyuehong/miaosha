@@ -44,21 +44,14 @@ public class MiaoShaController {
         Integer stock = goodsVo.getStockCount();
         if(stock <= 0){
             return Result.error(CodeMsg.MIAO_SHA_OVER);
-            /*model.addAttribute("err", CodeMsg.MIAO_SHA_OVER.getMsg());
-            return "miaosha_fail";*/
         }
         //判断是否已经秒杀过商品
         MiaoShaOrder miaoShaOrder = orderService.getMiaoShaOrderByUsreIdAndGoodsId(user.getId(),goodsId);
         if(miaoShaOrder != null){
             return Result.error(CodeMsg.REPEATE_MIAOSHA);
-            /*model.addAttribute("err", CodeMsg.REPEATE_MIAOSHA.getMsg());
-            return "miaosha_fail";*/
         }
         //减库存
         OrderInfo orderInfo = miaoShaService.miaoSha(user,goodsVo);
         return Result.success(orderInfo);
-       /* model.addAttribute("orderInfo", orderInfo);
-        model.addAttribute("goods", goodsVo);
-        return "order_detail";*/
     }
 }
