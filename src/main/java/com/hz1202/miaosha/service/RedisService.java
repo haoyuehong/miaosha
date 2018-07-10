@@ -119,14 +119,14 @@ public class RedisService {
      * @param key key
      * @return
      */
-    public Boolean decr(KeyPrefix prefix,String key){
+    public Long decr(KeyPrefix prefix,String key){
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
             //生成真正的key
             String realKey = prefix.getPrefix()+key;
-            jedis.decr(realKey);
-            return true;
+
+            return jedis.decr(realKey);
         }finally {
             returnToPool(jedis);
         }

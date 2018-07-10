@@ -44,10 +44,10 @@ public class OrderService {
         orderInfo.setStatus(0);
         orderInfo.setOrderChannel(1);
         orderInfo.setGoodsPrice(goodsVo.getMiaoshaPrice());
-        Long orderId = orderDao.insertInfo(orderInfo);
+        orderDao.insertInfo(orderInfo);
         MiaoShaOrder miaoShaOrder = new MiaoShaOrder();
         miaoShaOrder.setGoodsId(goodsVo.getId());
-        miaoShaOrder.setOrderId(orderId);
+        miaoShaOrder.setOrderId(orderInfo.getId());
         miaoShaOrder.setUserId(user.getId());
         orderDao.insertMiaoShaOrder(miaoShaOrder);
         redisService.set(OrderKey.getMiaoShaOrderByUidGId,""+user.getId()+"_"+goodsVo.getId(),miaoShaOrder);

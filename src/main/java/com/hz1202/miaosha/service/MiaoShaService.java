@@ -26,8 +26,11 @@ public class MiaoShaService {
     @Transactional
     public OrderInfo miaoSha(MiaoShaUser user, GoodsVo goodsVo) {
 
-        goodsService.reduceStock(goodsVo);
+        Boolean success = goodsService.reduceStock(goodsVo);
 
-        return orderService.creatOrder(user,goodsVo);
+        if(success){
+            return orderService.creatOrder(user,goodsVo);
+        }
+        return null;
     }
 }

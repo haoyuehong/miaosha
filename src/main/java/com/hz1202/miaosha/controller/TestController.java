@@ -85,4 +85,26 @@ public class TestController {
         return Result.success(true);
     }
 
+    @RequestMapping("/mq/topic")
+    @ResponseBody
+    public Result mqTopic(){
+        mqSender.sendTopic("驱蚊器翁群翁群无");
+        return Result.success(true);
+    }
+
+    @RequestMapping("/mq/fanout")
+    @ResponseBody
+    public Result fanout(){
+        mqSender.sendFanout("驱蚊器翁群翁群无");
+        return Result.success(true);
+    }
+
+
+    @RequestMapping("/mq/header")
+    @ResponseBody
+    public Result header(){
+        mqSender.sendHeader("驱蚊器翁群翁群无");
+        return Result.success(true);
+    }
+
 }

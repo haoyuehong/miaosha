@@ -71,6 +71,13 @@
 </body>
 <script>
 
+    function getMiaoshaResult(goodsId) {
+        $.ajax({
+
+        })
+
+    }
+
     function doMiaosha(){
         var goodsId = getQueryString("goodsId");
         $.ajax({
@@ -80,8 +87,10 @@
             },
             type:"POST",
             success:function (data) {
-               if(data.code == 0){
+               if(data.code == 0){//排队中
                     window.location.href="/order_detail.htm?oderId="+data.data.id;
+                    //轮询
+                   getMiaoshaResult(goodsId)
                }else{
                    layer.msg(data.msg)
                }
