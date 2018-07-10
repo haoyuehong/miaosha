@@ -1,6 +1,7 @@
 package com.hz1202.miaosha.controller;
 
 import com.hz1202.miaosha.model.User;
+import com.hz1202.miaosha.rabbitmq.MQSender;
 import com.hz1202.miaosha.redis.UserKey;
 import com.hz1202.miaosha.result.Result;
 import com.hz1202.miaosha.service.RedisService;
@@ -27,6 +28,8 @@ public class TestController {
     private UserService userService;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private MQSender mqSender;
 
     @RequestMapping(value = "/hello")
     public String test1(Model model){
@@ -73,5 +76,12 @@ public class TestController {
         return Result.success(redisService.set(UserKey.getById,"id",userService.getById(6)));
     }
 
+
+    @RequestMapping("/mq")
+    @ResponseBody
+    public Result mq(){
+        mqSender.send("驱蚊器翁群翁群无");
+        return Result.success(true);
+    }
 
 }
