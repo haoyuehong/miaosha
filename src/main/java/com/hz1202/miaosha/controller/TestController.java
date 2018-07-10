@@ -37,6 +37,7 @@ public class TestController {
         return "hello";
     }
 
+
     @RequestMapping("/user")
     @ResponseBody
     public Result getById(Integer id){
