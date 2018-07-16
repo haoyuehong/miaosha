@@ -89,19 +89,16 @@ public class MiaoShaController implements InitializingBean {
         mqSender.sendMiaoShaMessage(miaoShaMessage);
 
         return Result.success(0);
-        /*GoodsVo goodsVo = goodsService.findById(goodsId);
-        Integer stock = goodsVo.getStockCount();
-        if(stock <= 0){
-            return Result.error(CodeMsg.MIAO_SHA_OVER);
+    }
+
+    @RequestMapping("/result")
+    @ResponseBody
+    public Result miaoShaResult(MiaoShaUser miaoShaUser ,Long goodsId){
+        if(miaoShaUser == null){
+            return Result.error(CodeMsg.SESSION_ERROR);
         }
-        //判断是否已经秒杀过商品
-        MiaoShaOrder miaoShaOrder = orderService.getMiaoShaOrderByUsreIdAndGoodsId(user.getId(),goodsId);
-        if(miaoShaOrder != null){
-            return Result.error(CodeMsg.REPEATE_MIAOSHA);
-        }
-        //减库存
-        OrderInfo orderInfo = miaoShaService.miaoSha(user,goodsVo);
-        return Result.success(orderInfo);*/
+        Long result = miaoShaService.getMiaoShaResult(miaoShaUser.getId(),goodsId);
+        return Result.success(result);
     }
 
 

@@ -16,6 +16,7 @@ public class CodeMsg {
 	public static CodeMsg MOBILE_NOT_EXIT = new CodeMsg(500214,"手机号不存在");
 	public static CodeMsg PASSWORD_ERROR = new CodeMsg(500215,"密码错误");
 	//商品模块 5003XX
+	public static CodeMsg GOODSOVER = new CodeMsg(500300,"商品已售罄");
 	
 	//订单模块 5004XX
 	public static CodeMsg ORDER_NULL = new CodeMsg(500400,"订单为空");
