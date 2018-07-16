@@ -125,7 +125,6 @@ public class RedisService {
             jedis = jedisPool.getResource();
             //生成真正的key
             String realKey = prefix.getPrefix()+key;
-
             return jedis.decr(realKey);
         }finally {
             returnToPool(jedis);

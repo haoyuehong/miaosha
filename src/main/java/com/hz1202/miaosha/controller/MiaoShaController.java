@@ -2,7 +2,6 @@ package com.hz1202.miaosha.controller;
 
 import com.hz1202.miaosha.model.MiaoShaOrder;
 import com.hz1202.miaosha.model.MiaoShaUser;
-import com.hz1202.miaosha.model.OrderInfo;
 import com.hz1202.miaosha.rabbitmq.MQSender;
 import com.hz1202.miaosha.redis.GoodsKey;
 import com.hz1202.miaosha.result.CodeMsg;

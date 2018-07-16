@@ -120,7 +120,7 @@
             type:"POST",
             success:function (data) {
                if(data.code == 0){//排队中
-                    window.location.href="/order_detail.htm?oderId="+data.data.id;
+                    //window.location.href="/order_detail.htm?oderId="+data.data.id;
                     //轮询
                    getMiaoshaResult(goodsId)
                }else{
